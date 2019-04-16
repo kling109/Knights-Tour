@@ -35,14 +35,24 @@ KnightTour::~KnightTour()
 */
 bool KnightTour::contains(vector<Node<vector<int>*>*>* source, vector<int>* elem)
 {
- for (int i = 0; i < source->size(); ++i)
- {
-   if (source->at(i)->getData()->at(0) == elem->at(0) && source->at(i)->getData()->at(1) == elem->at(1))
-   {
-     return true;
-   }
- }
- return false;
+  if (source == NULL || elem == NULL || elem->size() < 2)
+  {
+    cout << "Source for conainment or element does not exist." << endl;
+    return false;
+  }
+  for (int i = 0; i < source->size(); ++i)
+  {
+    if (source->at(i)->getData() == NULL || source->at(i)->getData()->size() < 2)
+    {
+      cout << "The source vector was not completely filled." << endl;
+      return false;
+    }
+    if (source->at(i)->getData()->at(0) == elem->at(0) && source->at(i)->getData()->at(1) == elem->at(1))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 /*
@@ -50,6 +60,11 @@ bool KnightTour::contains(vector<Node<vector<int>*>*>* source, vector<int>* elem
 */
 void KnightTour::addChildren(Node<vector<int>*>* currLoc)
 {
+  if (currLoc->getData()->size() < 2)
+  {
+    cout << "The given node does not contain the necessary data." << endl;
+    return;
+  }
   int x = currLoc->getData()->at(0);
   int y = currLoc->getData()->at(1);
   vector<Node<vector<int>*>*>* visited = this->paths->trace(currLoc);
@@ -152,6 +167,11 @@ void KnightTour::addChildren(Node<vector<int>*>* currLoc)
 */
 Node<vector<int>*>* KnightTour::bruteSearch(Node<vector<int>*>* currLoc, int currDepth)
 {
+  if (currLoc == NULL)
+  {
+    cout << "No node was given." << endl;
+    return NULL;
+  }
   int newDepth = currDepth + 1;
   addChildren(currLoc);
   if (newDepth == this->depth)
@@ -203,231 +223,14 @@ void KnightTour::runBrute()
 /*
 
 */
-void KnightTour::addSortedChildren(Node<vector<int>*>* currLoc)
-{
-  int x = currLoc->getData()->at(0);
-  int y = currLoc->getData()->at(1);
-  vector<Node<vector<int>*>*>* visited = this->paths->trace(currLoc);
-  vector<vector<int>*>* toAdd = new vector<vector<int>*>();
-  if (x+2 < this->boardSize)
-  {
-    if (y+1 < this->boardSize)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x+2);
-      newSquare->push_back(y+1);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-    if (y-1 >= 0)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x+2);
-      newSquare->push_back(y-1);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-  }
-  if (x-2 >= 0)
-  {
-    if (y+1 < this->boardSize)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x-2);
-      newSquare->push_back(y+1);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-    if (y-1 >= 0)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x-2);
-      newSquare->push_back(y-1);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-  }
-  if (x+1 < this->boardSize)
-  {
-    if (y+2 < this->boardSize)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x+1);
-      newSquare->push_back(y+2);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-    if (y-2 >= 0)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x+1);
-      newSquare->push_back(y-2);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-  }
-  if (x-1 >= 0)
-  {
-    if (y+2 < this->boardSize)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x-1);
-      newSquare->push_back(y+2);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-    if (y-2 >= 0)
-    {
-      vector<int>* newSquare = new vector<int>();
-      newSquare->push_back(x-1);
-      newSquare->push_back(y-2);
-      if (!contains(visited, newSquare))
-      {
-        toAdd->push_back(newSquare);
-      }
-    }
-  }
-  for (int i = 0; i < toAdd->size(); ++i)
-  {
-    int count = 0;
-    int currx = toAdd->at(i)->at(0);
-    int curry = toAdd->at(i)->at(1);
-    if (x+2 < this->boardSize)
-    {
-      if (y+1 < this->boardSize)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x+2);
-        testpos->push_back(y+1);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-      if (y-1 >= 0)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x+2);
-        testpos->push_back(y-1);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }      }
-    }
-    if (x-2 >= 0)
-    {
-      if (y+1 < this->boardSize)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x-2);
-        testpos->push_back(y+1);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-      if (y-1 >= 0)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x-2);
-        testpos->push_back(y-1);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-    }
-    if (x+1 < this->boardSize)
-    {
-      if (y+2 < this->boardSize)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x+1);
-        testpos->push_back(y+2);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-      if (y-2 >= 0)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x+1);
-        testpos->push_back(y-2);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-    }
-    if (x-1 >= 0)
-    {
-      if (y+2 < this->boardSize)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x-1);
-        testpos->push_back(y+2);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-      if (y-2 >= 0)
-      {
-        vector<int>* testpos = new vector<int>();
-        testpos->push_back(x-1);
-        testpos->push_back(y-2);
-        if (!contains(visited, testpos))
-        {
-          ++count;
-        }
-      }
-    }
-    toAdd->at(i)->push_back(count);
-  }
-  if (toAdd->size() != 0)
-  {
-    for (int i = 0; i < toAdd->size()-1; ++i)
-    {
-      for (int j = 0; j < toAdd->size() - i - 1; ++j)
-      {
-        if (toAdd->at(j)->at(2) > toAdd->at(j+1)->at(2))
-        {
-          vector<int>* temp = toAdd->at(j);
-          toAdd->at(j) = toAdd->at(j+1);
-          toAdd->at(j+1) = temp;
-        }
-      }
-    }
-    for (int i = 0; i < toAdd->size(); ++i)
-    {
-      toAdd->at(i)->pop_back();
-      this->paths->insert(toAdd->at(i), currLoc);
-    }
-  }
-}
-
-/*
-
-*/
 Node<vector<int>*>* KnightTour::heurSearch(Node<vector<int>*>* currLoc, int currDepth)
 {
+  if (currLoc == NULL)
+  {
+    cout << "No node was given." << endl;
+    return NULL;
+  }
   int newDepth = currDepth + 1;
-  addSortedChildren(currLoc);
   if (newDepth == this->depth)
   {
     return currLoc;
@@ -438,6 +241,23 @@ Node<vector<int>*>* KnightTour::heurSearch(Node<vector<int>*>* currLoc, int curr
   }
   else
   {
+    vector<Node<vector<int>*>*>* children = currLoc->getChildren();
+    for (int i = 0; i < children->size(); ++i)
+    {
+      addChildren(children->at(i));
+    }
+    for (int i = 0; i < children->size()-1; ++i)
+    {
+      for (int j = 0; j < children->size() - i - 1; ++j)
+      {
+        if (children->at(j)->getChildren()->size() > children->at(j+1)->getChildren()->size())
+        {
+          Node<vector<int>*>* temp = children->at(j);
+          children->at(j) = children->at(j+1);
+          children->at(j+1) = temp;
+        }
+      }
+    }
     for (int i = 0; i < currLoc->getChildren()->size(); ++i)
     {
       Node<vector<int>*>* point = heurSearch(currLoc->getChildren()->at(i), newDepth);
@@ -456,6 +276,7 @@ Node<vector<int>*>* KnightTour::heurSearch(Node<vector<int>*>* currLoc, int curr
 void KnightTour::runHeur()
 {
   this->depth = this->boardSize * this->boardSize;
+  addChildren(this->paths->getRoot());
   Node<vector<int>*>* pathFound = heurSearch(this->paths->getRoot(), 0);
   if (pathFound == NULL)
   {
