@@ -175,6 +175,7 @@ void KnightTour::addChildren(Node<vector<int>*>* currLoc)
       }
     }
   }
+  delete visited;
 }
 
 /*
@@ -210,6 +211,10 @@ Node<vector<int>*>* KnightTour::bruteSearch(Node<vector<int>*>* currLoc, int cur
       {
         return point;
       }
+    }
+    for (int i = 0; i < currLoc->getChildren()->size(); ++i)
+    {
+      currLoc->getChildren()->at(i)->~Node();
     }
     return NULL;
   }
