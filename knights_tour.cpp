@@ -9,6 +9,7 @@ Project: Knight's Tour Implementations
 
 #include <iostream>
 #include <math.h>
+#include <stdlib.h>
 #include <chrono>
 #include "knights_tour.h"
 
@@ -319,17 +320,24 @@ void KnightTour::runHeur()
 Main method for running both the brute-force and heuristic searches.  Both methods are timed with a high-resolution clock,
 and the results are output at the end of the program.
 */
-int main()
+int main(int argc, char** argv)
 {
+  if (argc < 4)
+  {
+    cout << "Insufficient arguments supplied.  Input the following command to run the program:" << endl;
+    cout << "./knight_tour [x-location] [y-location] [dimension]" << endl;
+    cout << "Where 'x-location' and 'y-location' are the position of the knight on the board, and 'dimension' is the length of the board." << endl;
+    return 1;
+  }
   chrono::time_point<std::chrono::high_resolution_clock> start1 = chrono::high_resolution_clock::now();
-  KnightTour* testBrute = new KnightTour(4, 3, 6);
+  KnightTour* testBrute = new KnightTour(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
   testBrute->runBrute();
   testBrute->~KnightTour();
   chrono::time_point<std::chrono::high_resolution_clock> finish1 = chrono::high_resolution_clock::now();
   chrono::duration<double> elapsed1 = finish1 - start1;
 
   chrono::time_point<std::chrono::high_resolution_clock> start2 = chrono::high_resolution_clock::now();
-  KnightTour* testHeur = new KnightTour(4, 3, 6);
+  KnightTour* testHeur = new KnightTour(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
   testHeur->runHeur();
   testHeur->~KnightTour();
   chrono::time_point<std::chrono::high_resolution_clock> finish2 = chrono::high_resolution_clock::now();
