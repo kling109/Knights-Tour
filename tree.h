@@ -16,7 +16,7 @@ template <typename T>
 class Node
 {
   /*
-
+  Provides a templated node Class for a tree.
   */
   private:
     T data;
@@ -36,7 +36,8 @@ template <typename T>
 class GenericTree
 {
   /*
-
+  Provides the methods needed for the implementation and useage of a tree with an arbitrary number
+  of children per node.
   */
   private:
     Node<T>* root;
@@ -54,7 +55,7 @@ class GenericTree
 };
 
 /*
-
+Standard Constructor for a node.
 */
 template<typename T>
 Node<T>::Node(T newData)
@@ -65,7 +66,8 @@ Node<T>::Node(T newData)
 }
 
 /*
-
+Standard deconstructor for a node.  c++ automatically deletes vectors when they fall
+out of scope, so there is no need to explicitly delete the children.
 */
 template<typename T>
 Node<T>::~Node()
@@ -75,7 +77,7 @@ Node<T>::~Node()
 }
 
 /*
-
+Accessor method for the data of a node.
 */
 template<typename T>
 T Node<T>::getData()
@@ -84,7 +86,7 @@ T Node<T>::getData()
 }
 
 /*
-
+Setter method for the parent of a node.
 */
 template<typename T>
 void Node<T>::setParent(Node<T>* par)
@@ -93,7 +95,7 @@ void Node<T>::setParent(Node<T>* par)
 }
 
 /*
-
+Accessor method for the parent of a node.
 */
 template<typename T>
 Node<T>* Node<T>::getParent()
@@ -102,7 +104,7 @@ Node<T>* Node<T>::getParent()
 }
 
 /*
-
+Adds a child to a vector of children for a node.
 */
 template<typename T>
 void Node<T>::addChild(Node<T>* child)
@@ -112,7 +114,7 @@ void Node<T>::addChild(Node<T>* child)
 }
 
 /*
-
+Returns a pointer to the vector of child node pointers.
 */
 template<typename T>
 vector<Node<T>*>* Node<T>::getChildren()
@@ -121,7 +123,7 @@ vector<Node<T>*>* Node<T>::getChildren()
 }
 
 /*
-
+Standard constructor for the tree.  Handles creation of the root node.
 */
 template<typename T>
 GenericTree<T>::GenericTree(T rootKey)
@@ -130,7 +132,7 @@ GenericTree<T>::GenericTree(T rootKey)
 }
 
 /*
-
+Standard deconstructor for the tree object.
 */
 template<typename T>
 GenericTree<T>::~GenericTree()
@@ -139,7 +141,7 @@ GenericTree<T>::~GenericTree()
 }
 
 /*
-
+Accessor method for the root of the tree.
 */
 template<typename T>
 Node<T>* GenericTree<T>::getRoot()
@@ -148,7 +150,8 @@ Node<T>* GenericTree<T>::getRoot()
 }
 
 /*
-
+Insertion method for the tree.  Requires the user to specify where the
+node should be inserted, as the tree allows any number of children.
 */
 template<typename T>
 void GenericTree<T>::insert(T key, Node<T>* location)
@@ -158,11 +161,16 @@ void GenericTree<T>::insert(T key, Node<T>* location)
 }
 
 /*
-
+Helper method for teh search method.  Calls itself recursively until the specified node is found.
 */
 template<typename T>
 Node<T>* GenericTree<T>::searchHelper(Node<T>* toSearch, T toFind)
 {
+  if (toSearch == NULL)
+  {
+    cout << "A node was not given to start the search." << endl;
+    return NULL;
+  }
   if (toSearch->getData() == toFind)
   {
     return toSearch;
@@ -182,7 +190,7 @@ Node<T>* GenericTree<T>::searchHelper(Node<T>* toSearch, T toFind)
 }
 
 /*
-
+A method which searches the tree for a given key, starting at the root.
 */
 template<typename T>
 Node<T>* GenericTree<T>::search(T key)
@@ -191,14 +199,15 @@ Node<T>* GenericTree<T>::search(T key)
 }
 
 /*
-
+A method which produces a trace of the path a node took from the root of its tree to
+the current node.
 */
 template<typename T>
 vector<Node<T>*>* GenericTree<T>::trace(Node<T>* endNode)
 {
   Node<T>* currNode= endNode;
   vector<Node<T>*>* path = new vector<Node<T>*>();
-  while (currNode != this->root)
+  while (currNode->getParent() != NULL)
   {
     path->push_back(currNode);
     currNode = currNode->getParent();
@@ -208,7 +217,8 @@ vector<Node<T>*>* GenericTree<T>::trace(Node<T>* endNode)
 }
 
 /*
-
+Removes a particular key from the tree.  The method first finds the given node, then removes it after
+reassigning all pointers around it.
 */
 template<typename T>
 void GenericTree<T>::remove(T key)
@@ -235,7 +245,7 @@ void GenericTree<T>::remove(T key)
 }
 
 /*
-
+Prints the tree to the command line.  Used primarily for testing.
 */
 template<typename T>
 void GenericTree<T>::printHelper(Node<T>* toSearch)
@@ -251,7 +261,7 @@ void GenericTree<T>::printHelper(Node<T>* toSearch)
 }
 
 /*
-
+Prints the tree to the command line.  Used primarily for testing.
 */
 template<typename T>
 void GenericTree<T>::printTree()

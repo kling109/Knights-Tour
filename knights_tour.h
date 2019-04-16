@@ -14,7 +14,7 @@ Project: Knight's Tour Implementations
 class KnightTour
 {
   /*
-
+  Provides the methods to find a Knight's Tour on an arbitrary N by N chessboard.
   */
   private:
     GenericTree<std::vector<int>*>* paths;
