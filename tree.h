@@ -207,7 +207,7 @@ vector<Node<T>*>* GenericTree<T>::trace(Node<T>* endNode)
 {
   Node<T>* currNode= endNode;
   vector<Node<T>*>* path = new vector<Node<T>*>();
-  while (currNode->getParent() != NULL)
+  while (currNode != this->root)
   {
     path->push_back(currNode);
     currNode = currNode->getParent();

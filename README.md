@@ -20,6 +20,8 @@ to decide which path to check first.
 
 ## Known Issues
 
-Crashes for N > 5.  Could be due to hardware constraints not allowing for full tree to be loaded in RAM.
+None.
 
 ## Sources
+
+None.

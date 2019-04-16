@@ -8,6 +8,7 @@ Project: Knight's Tour Implementations
 */
 
 #include <iostream>
+#include <math.h>
 #include <chrono>
 #include "knights_tour.h"
 
@@ -45,7 +46,6 @@ and the program returns false.
 */
 bool KnightTour::contains(vector<Node<vector<int>*>*>* source, vector<int>* elem)
 {
-  cout << "In 'contains'" << endl;
   if (source == NULL || elem == NULL || elem->size() < 2)
   {
     cout << "Source for conainment or element does not exist." << endl;
@@ -74,7 +74,6 @@ any of the eight possible moves a knight can make.
 */
 void KnightTour::addChildren(Node<vector<int>*>* currLoc)
 {
-  cout << "In 'addChildren'" << endl;
   if (currLoc->getData()->size() < 2)
   {
     cout << "The given node does not contain the necessary data." << endl;
@@ -175,7 +174,6 @@ void KnightTour::addChildren(Node<vector<int>*>* currLoc)
       }
     }
   }
-  cout << "Finished 'addChildren'" << endl;
 }
 
 /*
@@ -193,7 +191,6 @@ Node<vector<int>*>* KnightTour::bruteSearch(Node<vector<int>*>* currLoc, int cur
     return NULL;
   }
   int newDepth = currDepth + 1;
-  cout << "In 'bruteSearch', depth = " << currDepth << endl;
   addChildren(currLoc);
   if (newDepth == this->depth)
   {
@@ -215,7 +212,6 @@ Node<vector<int>*>* KnightTour::bruteSearch(Node<vector<int>*>* currLoc, int cur
     }
     return NULL;
   }
-  cout << "Finished 'bruteSearch'" << endl;
 }
 
 /*
@@ -326,18 +322,20 @@ and the results are output at the end of the program.
 int main()
 {
   chrono::time_point<std::chrono::high_resolution_clock> start1 = chrono::high_resolution_clock::now();
-  KnightTour* testBrute = new KnightTour(3, 3, 6);
+  KnightTour* testBrute = new KnightTour(4, 3, 6);
   testBrute->runBrute();
   testBrute->~KnightTour();
   chrono::time_point<std::chrono::high_resolution_clock> finish1 = chrono::high_resolution_clock::now();
   chrono::duration<double> elapsed1 = finish1 - start1;
+
   chrono::time_point<std::chrono::high_resolution_clock> start2 = chrono::high_resolution_clock::now();
-  KnightTour* testHeur = new KnightTour(3, 3, 6);
+  KnightTour* testHeur = new KnightTour(4, 3, 6);
   testHeur->runHeur();
   testHeur->~KnightTour();
   chrono::time_point<std::chrono::high_resolution_clock> finish2 = chrono::high_resolution_clock::now();
   chrono::duration<double> elapsed2 = finish2 - start2;
-  cout << "Brute Run Time: " << elapsed1.count() << endl;
-  cout << "Heuristic Run Time: " << elapsed2.count() << endl;
+
+  cout << "Brute Run Time: " << int(elapsed1.count() / 360)  << "h " << (int(elapsed1.count() / 60) % 60) << "m " << fmod(elapsed1.count(), 60) << "s" << endl;
+  cout << "Heuristic Run Time: " << int(elapsed2.count() / 360)  << "h " << (int(elapsed2.count() / 60) % 60) << "m " << fmod(elapsed2.count(), 60) << "s" << endl;
   return 0;
 }
