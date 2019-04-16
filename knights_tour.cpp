@@ -8,6 +8,7 @@ Project: Knight's Tour Implementations
 */
 
 #include <iostream>
+#include <chrono>
 #include "knights_tour.h"
 
 using namespace std;
@@ -478,11 +479,19 @@ void KnightTour::runHeur()
 */
 int main()
 {
-  KnightTour* testBrute = new KnightTour(1, 1, 5);
+  chrono::time_point<std::chrono::high_resolution_clock> start1 = chrono::high_resolution_clock::now();
+  KnightTour* testBrute = new KnightTour(3, 3, 6);
   testBrute->runBrute();
   testBrute->~KnightTour();
-  KnightTour* testHeur = new KnightTour(1, 1, 5);
+  chrono::time_point<std::chrono::high_resolution_clock> finish1 = chrono::high_resolution_clock::now();
+  chrono::duration<double> elapsed1 = finish1 - start1;
+  chrono::time_point<std::chrono::high_resolution_clock> start2 = chrono::high_resolution_clock::now();
+  KnightTour* testHeur = new KnightTour(3, 3, 6);
   testHeur->runHeur();
   testHeur->~KnightTour();
+  chrono::time_point<std::chrono::high_resolution_clock> finish2 = chrono::high_resolution_clock::now();
+  chrono::duration<double> elapsed2 = finish2 - start2;
+  cout << "Brute Run Time: " << elapsed1.count() << endl;
+  cout << "Heuristic Run Time: " << elapsed2.count() << endl;
   return 0;
 }
