@@ -1,4 +1,4 @@
-# Knights-Tour
+# Knight's Tour
 
 Trevor Kling
 
