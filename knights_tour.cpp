@@ -354,7 +354,6 @@ int main(int argc, char** argv)
       if (atoi(argv[i]) != 0)
       {
         arguments[pos] = argv[i];
-        cout << argv[i] << endl;
         ++pos;
       }
     }
