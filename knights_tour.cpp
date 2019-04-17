@@ -327,28 +327,44 @@ and the results are output at the end of the program.
 */
 int main(int argc, char** argv)
 {
-  if (argc < 4)
+  if (argc < 4 || argc > 5)
   {
     cout << "Insufficient arguments supplied.  Input the following command to run the program:" << endl;
-    cout << "./knight_tour [x-location] [y-location] [dimension]" << endl;
-    cout << "Where 'x-location' and 'y-location' are the position of the knight on the board, and 'dimension' is the length of the board." << endl;
+    cout << "./knight_tour --[h] [x-location] [y-location] [dimension]" << endl;
+    cout << "Where 'x-location' and 'y-location' are the position of the knight on the board, and 'dimension' is the length of the board.  --h makes the solution heuristic." << endl;
     return 1;
   }
-  chrono::time_point<std::chrono::high_resolution_clock> start1 = chrono::high_resolution_clock::now();
-  KnightTour* testBrute = new KnightTour(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
-  testBrute->runBrute();
-  testBrute->~KnightTour();
-  chrono::time_point<std::chrono::high_resolution_clock> finish1 = chrono::high_resolution_clock::now();
-  chrono::duration<double> elapsed1 = finish1 - start1;
-
-  chrono::time_point<std::chrono::high_resolution_clock> start2 = chrono::high_resolution_clock::now();
-  KnightTour* testHeur = new KnightTour(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
-  testHeur->runHeur();
-  testHeur->~KnightTour();
-  chrono::time_point<std::chrono::high_resolution_clock> finish2 = chrono::high_resolution_clock::now();
-  chrono::duration<double> elapsed2 = finish2 - start2;
-
-  cout << "Brute Run Time: " << int(elapsed1.count() / 360)  << "h " << (int(elapsed1.count() / 60) % 60) << "m " << fmod(elapsed1.count(), 60) << "s" << endl;
-  cout << "Heuristic Run Time: " << int(elapsed2.count() / 360)  << "h " << (int(elapsed2.count() / 60) % 60) << "m " << fmod(elapsed2.count(), 60) << "s" << endl;
+  if (argc == 4)
+  {
+    chrono::time_point<std::chrono::high_resolution_clock> start1 = chrono::high_resolution_clock::now();
+    KnightTour* testBrute = new KnightTour(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+    testBrute->runBrute();
+    testBrute->~KnightTour();
+    chrono::time_point<std::chrono::high_resolution_clock> finish1 = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed1 = finish1 - start1;
+    cout << "Brute Run Time: " << int(elapsed1.count() / 360)  << "h " << (int(elapsed1.count() / 60) % 60) << "m " << fmod(elapsed1.count(), 60) << "s" << endl;
+  }
+  if (argc == 5)
+  {
+    char* arguments[3];
+    int pos = 0;
+    char h[] = {'-', '-', 'h'};
+    for (int i = 0; i < argc; ++i)
+    {
+      if (atoi(argv[i]) != 0)
+      {
+        arguments[pos] = argv[i];
+        cout << argv[i] << endl;
+        ++pos;
+      }
+    }
+    chrono::time_point<std::chrono::high_resolution_clock> start2 = chrono::high_resolution_clock::now();
+    KnightTour* testHeur = new KnightTour(atoi(arguments[0]), atoi(arguments[1]), atoi(arguments[2]));
+    testHeur->runHeur();
+    testHeur->~KnightTour();
+    chrono::time_point<std::chrono::high_resolution_clock> finish2 = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed2 = finish2 - start2;
+    cout << "Heuristic Run Time: " << int(elapsed2.count() / 360)  << "h " << (int(elapsed2.count() / 60) % 60) << "m " << fmod(elapsed2.count(), 60) << "s" << endl;
+  }
   return 0;
 }
